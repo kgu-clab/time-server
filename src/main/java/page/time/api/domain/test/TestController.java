@@ -1,4 +1,4 @@
-package page.time.api.domain;
+package page.time.api.domain.test;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

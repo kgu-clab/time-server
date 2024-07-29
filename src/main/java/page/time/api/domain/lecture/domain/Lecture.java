@@ -2,6 +2,8 @@ package page.time.api.domain.lecture.domain;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,10 +29,17 @@ public class Lecture {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Type type;
+
     private String professor;
 
     @NotNull
     private String name;
+
+    @NotNull
+    private String groupName;
 
     @NotNull
     private String campus;
@@ -60,4 +69,5 @@ public class Lecture {
 
     private String major;
 
+    private Boolean isExceeded;
 }

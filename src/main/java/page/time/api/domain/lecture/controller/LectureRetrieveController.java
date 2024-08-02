@@ -3,7 +3,6 @@ package page.time.api.domain.lecture.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,7 +40,7 @@ public class LectureRetrieveController {
             @RequestParam(name = "limit", defaultValue = "50") int limit
     ) {
         CursorResult<LectureResponseDto> lectures = lectureRetrieveService.retrieveLectures(
-                campus, type, grade, day, time, major, isExceeded, lectureName, cursor, PageRequest.of(0, limit)
+                campus, type, grade, day, time, major, isExceeded, lectureName, cursor, limit
         );
         return ApiResponse.success(lectures);
     }

@@ -14,7 +14,7 @@ import static page.time.api.domain.lecture.domain.QLecture.lecture;
 
 @Repository
 @RequiredArgsConstructor
-public class LectureRepositoryCustomImpl implements LectureRepositoryCustom{
+public class LectureRepositoryCustomImpl implements LectureRepositoryCustom {
 
     private final JPAQueryFactory query;
 
@@ -23,14 +23,14 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom{
         return query
                 .selectFrom(lecture)
                 .where(
-                        eqToCampus(campus),
-                        eqToType(type),
-                        eqToGrade(grade),
+                        containsToLectureName(lectureName),
+                        eqToMajor(major),
                         eqToDay(day),
                         eqToTime(time),
-                        eqToMajor(major),
+                        eqToGrade(grade),
+                        eqToType(type),
+                        eqToCampus(campus),
                         eqToIsExceeded(isExceeded),
-                        containsToLectureName(lectureName),
                         gtCursor(cursor)
                 )
                 .limit(limit + 1)
@@ -62,11 +62,9 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom{
         if (days == null || days.isEmpty()) {
             return null;
         }
-        BooleanExpression isElearning = lecture.time.eq("이러닝").and(lecture.groupName.contains("이러닝"));
-        BooleanBuilder builder = new BooleanBuilder(isElearning);
+        BooleanBuilder builder = new BooleanBuilder();
         days.stream()
-                .map(day -> lecture.time.startsWith(day)
-                        .and(lecture.groupName.contains("이러닝").not()))
+                .map(lecture.time::contains)
                 .forEach(builder::or);
         return builder;
     }
@@ -86,7 +84,7 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom{
         if (major == null || major.isEmpty()) {
             return null;
         }
-        return lecture.major.eq(major);
+        return lecture.major.contains(major);
     }
 
     private BooleanExpression eqToIsExceeded(Boolean isExceeded) {

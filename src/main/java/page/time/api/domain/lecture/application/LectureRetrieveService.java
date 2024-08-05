@@ -24,23 +24,6 @@ public class LectureRetrieveService {
         List<LectureResponseDto> lectureDetailResponseDtos = lectures.stream()
                 .map(LectureResponseDto::toDto)
                 .collect(Collectors.toList());
-        return new CursorResult<>(lectureDetailResponseDtos, checkFirstPage(cursor, lectureDetailResponseDtos), checkLastPage(limit, lectureDetailResponseDtos));
-    }
-
-    private boolean checkFirstPage(Long cursor, List<LectureResponseDto> lectureDetailResponseDtos) {
-        boolean hasPrevious = false;
-        if ((cursor != null) && (lectureDetailResponseDtos.get(0).getId() > cursor)) {
-            hasPrevious = true;
-        }
-        return hasPrevious;
-    }
-
-    private boolean checkLastPage(int limit, List<LectureResponseDto> lectureDetailResponseDtos) {
-        boolean hasNext = false;
-        if (lectureDetailResponseDtos.size() > limit) {
-            hasNext = true;
-            lectureDetailResponseDtos.remove(limit);
-        }
-        return hasNext;
+        return CursorResult.of(lectureDetailResponseDtos, cursor, limit);
     }
 }

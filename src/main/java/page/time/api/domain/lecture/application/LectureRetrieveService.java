@@ -2,6 +2,7 @@ package page.time.api.domain.lecture.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import page.time.api.domain.lecture.dao.LectureRepository;
 import page.time.api.domain.lecture.domain.Lecture;
 import page.time.api.domain.lecture.domain.Type;
@@ -17,6 +18,7 @@ public class LectureRetrieveService {
 
     private final LectureRepository lectureRepository;
 
+    @Transactional(readOnly = true)
     public CursorResult<LectureResponseDto> retrieveLectures(
             String campus, Type type, Integer grade, List<String> day, List<String> time, String major, Boolean isExceeded, String lectureName, Long cursor, int limit
     ) {
@@ -27,6 +29,7 @@ public class LectureRetrieveService {
         return CursorResult.of(lectureDetailResponseDtos, cursor, limit);
     }
 
+    @Transactional(readOnly = true)
     public List<String> retrieveMajor(String major) {
         return lectureRepository.findByMajor(major);
     }

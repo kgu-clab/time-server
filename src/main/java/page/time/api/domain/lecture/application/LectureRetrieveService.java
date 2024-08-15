@@ -26,4 +26,8 @@ public class LectureRetrieveService {
                 .collect(Collectors.toList());
         return CursorResult.of(lectureDetailResponseDtos, cursor, limit);
     }
+
+    public List<String> retrieveMajor(String major) {
+        return lectureRepository.findByMajor(major);
+    }
 }

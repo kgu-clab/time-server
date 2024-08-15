@@ -37,6 +37,19 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public List<String> findByMajor(String major) {
+        return query
+                .select(lecture.major)
+                .distinct()
+                .from(lecture)
+                .where(
+                        lecture.major.ne("None")
+                                .and(eqToMajor(major))
+                )
+                .fetch();
+    }
+
     private BooleanExpression eqToCampus(String campus) {
         if (campus == null || campus.isEmpty()) {
             return null;

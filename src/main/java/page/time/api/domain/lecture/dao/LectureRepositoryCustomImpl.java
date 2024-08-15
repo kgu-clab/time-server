@@ -18,6 +18,8 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom {
 
     private final JPAQueryFactory query;
 
+    private static final String NONE = "None";
+
     @Override
     public List<Lecture> findByFilter(String campus, Type type, Integer grade, List<String> day, List<String> time, String major, Boolean isExceeded, String lectureName, Long cursor, int limit) {
         return query
@@ -34,6 +36,19 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom {
                         gtCursor(cursor)
                 )
                 .limit(limit + 1)
+                .fetch();
+    }
+
+    @Override
+    public List<String> findByMajor(String major) {
+        return query
+                .select(lecture.major)
+                .distinct()
+                .from(lecture)
+                .where(
+                        lecture.major.ne(NONE)
+                                .and(eqToMajor(major))
+                )
                 .fetch();
     }
 

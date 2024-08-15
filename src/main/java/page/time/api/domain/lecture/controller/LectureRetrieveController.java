@@ -44,4 +44,15 @@ public class LectureRetrieveController {
         );
         return ApiResponse.success(lectures);
     }
+
+    @Operation(summary = "전공 이름 조회", description =
+            "검색된 결과를 토대로 완전한 전공 이름을 조회함<br>" +
+            "입력하지 않으면 전체 조회됨<br>")
+    @GetMapping("/major")
+    public ApiResponse<List<String>> retrieveAllMajor(
+            @RequestParam(name = "major", required = false) String major
+    ) {
+        List<String> majors = lectureRetrieveService.retrieveMajor(major);
+        return ApiResponse.success(majors);
+    }
 }

@@ -1,10 +1,10 @@
 package page.time.api.domain.lecture.dao;
 
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 import page.time.api.domain.lecture.domain.Lecture;
 import page.time.api.domain.lecture.domain.Type;
 
@@ -21,17 +21,17 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom {
     private static final String NONE = "None";
 
     @Override
-    public List<Lecture> findByFilter(String campus, Type type, Integer grade, List<String> day, List<String> time, String major, Boolean isExceeded, String lectureName, Long cursor, int limit) {
+    public List<Lecture> findByFilter(List<String> campuses, List<Type> types, List<Integer> grades, List<String> days, List<String> times, List<String> majors, Boolean isExceeded, String lectureName, Long cursor, int limit) {
         return query
                 .selectFrom(lecture)
                 .where(
                         containsToLectureName(lectureName),
-                        eqToMajor(major),
-                        eqToDay(day),
-                        eqToTime(time),
-                        eqToGrade(grade),
-                        eqToType(type),
-                        eqToCampus(campus),
+                        eqToMajors(majors),
+                        eqToDays(days),
+                        eqToTimes(times),
+                        eqToGrades(grades),
+                        eqToTypes(types),
+                        eqToCampuses(campuses),
                         eqToIsExceeded(isExceeded),
                         gtCursor(cursor)
                 )
@@ -52,47 +52,54 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom {
                 .fetch();
     }
 
-    private BooleanExpression eqToCampus(String campus) {
-        if (campus == null || campus.isEmpty()) {
+    private BooleanExpression eqToCampuses(List<String> campuses) {
+        if (CollectionUtils.isEmpty(campuses)) {
             return null;
         }
-        return lecture.campus.contains(campus);
+        return campuses.stream()
+                .map(lecture.campus::contains)
+                .reduce(BooleanExpression::or)
+                .orElse(null);
     }
 
-    private BooleanExpression eqToType(Type type) {
-        if (type == null) {
+    private BooleanExpression eqToTypes(List<Type> types) {
+        if (CollectionUtils.isEmpty(types)) {
             return null;
         }
-        return lecture.type.eq(type);
+        return types.stream()
+                .map(lecture.type::eq)
+                .reduce(BooleanExpression::or)
+                .orElse(null);
     }
 
-    private BooleanExpression eqToGrade(Integer grade) {
-        if (grade == null) {
+    private BooleanExpression eqToGrades(List<Integer> grades) {
+        if (CollectionUtils.isEmpty(grades)) {
             return null;
         }
-        return lecture.grade.eq(grade);
+        return grades.stream()
+                .map(lecture.grade::eq)
+                .reduce(BooleanExpression::or)
+                .orElse(null);
     }
 
-    private BooleanBuilder eqToDay(List<String> days) {
-        if (days == null || days.isEmpty()) {
+    private BooleanExpression eqToDays(List<String> days) {
+        if (CollectionUtils.isEmpty(days)) {
             return null;
         }
-        BooleanBuilder builder = new BooleanBuilder();
-        days.stream()
+        return days.stream()
                 .map(lecture.time::contains)
-                .forEach(builder::or);
-        return builder;
+                .reduce(BooleanExpression::or)
+                .orElse(null);
     }
 
-    private BooleanBuilder eqToTime(List<String> times) {
-        if (times == null || times.isEmpty()) {
+    private BooleanExpression eqToTimes(List<String> times) {
+        if (CollectionUtils.isEmpty(times)) {
             return null;
         }
-        BooleanBuilder builder = new BooleanBuilder();
-        times.stream()
+        return times.stream()
                 .map(lecture.time::contains)
-                .forEach(builder::or);
-        return builder;
+                .reduce(BooleanExpression::or)
+                .orElse(null);
     }
 
     private BooleanExpression eqToMajor(String major) {
@@ -100,6 +107,16 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom {
             return null;
         }
         return lecture.major.contains(major);
+    }
+
+    private BooleanExpression eqToMajors(List<String> majors) {
+        if (CollectionUtils.isEmpty(majors)) {
+            return null;
+        }
+        return majors.stream()
+                .map(lecture.major::contains)
+                .reduce(BooleanExpression::or)
+                .orElse(null);
     }
 
     private BooleanExpression eqToIsExceeded(Boolean isExceeded) {

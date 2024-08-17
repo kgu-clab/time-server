@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface LectureRepositoryCustom {
 
-    List<Lecture> findByFilter(String campus, Type type, Integer grade, List<String> day, List<String> time, String major, Boolean isExceeded, String lectureName, Long cursor, int limit);
+    List<Lecture> findByFilter(List<String> campuses, List<Type> types, List<Integer> grades, List<String> days, List<String> times, List<String> majors, Boolean isExceeded, String lectureName, Long cursor, int limit);
 
     List<String> findByMajor(String major);
 }

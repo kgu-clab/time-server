@@ -16,27 +16,25 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class LectureRetrieveService {
 
     private final LectureRepository lectureRepository;
 
-    @Transactional(readOnly = true)
     public CursorResult<LectureResponseDto> retrieveLectures(
-            String campus, Type type, Integer grade, List<String> day, List<String> time, String major, Boolean isExceeded, String lectureName, Long cursor, int limit
+            List<String> campuses, List<Type> types, List<Integer> grades, List<String> days, List<String> times, List<String> majors, Boolean isExceeded, String lectureName, Long cursor, int limit
     ) {
-        List<Lecture> lectures = lectureRepository.findByFilter(campus, type, grade, day, time, major, isExceeded, lectureName, cursor, limit);
+        List<Lecture> lectures = lectureRepository.findByFilter(campuses, types, grades, days, times, majors, isExceeded, lectureName, cursor, limit);
         List<LectureResponseDto> lectureDetailResponseDtos = lectures.stream()
                 .map(LectureResponseDto::toDto)
                 .collect(Collectors.toList());
         return CursorResult.of(lectureDetailResponseDtos, cursor, limit);
     }
 
-    @Transactional(readOnly = true)
     public List<String> retrieveMajor(String major) {
         return lectureRepository.findByMajor(major);
     }
 
-    @Transactional(readOnly = true)
     public List<LectureSelectResponseDto> retrieveSelectedLecturesByIds(List<Long> lectureIds) {
         return lectureIds.stream()
                 .map(lectureRepository::findById)

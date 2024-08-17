@@ -29,19 +29,19 @@ public class LectureRetrieveController {
             "모든 파라미터를 하나라도 입력하지 않으면 전체 조회됨<br>")
     @GetMapping("")
     public ApiResponse<CursorResult<LectureResponseDto>> retrieveLectures(
-            @RequestParam(name = "campus", required = false) String campus,
-            @RequestParam(name = "type", required = false) Type type,
-            @RequestParam(name = "grade", required = false) Integer grade,
-            @RequestParam(name = "day", required = false) List<String> day,
-            @RequestParam(name = "time", required = false) List<String> time,
-            @RequestParam(name = "major", required = false) String major,
+            @RequestParam(name = "campus", required = false) List<String> campuses,
+            @RequestParam(name = "type", required = false) List<Type> types,
+            @RequestParam(name = "grade", required = false) List<Integer> grades,
+            @RequestParam(name = "day", required = false) List<String> days,
+            @RequestParam(name = "time", required = false) List<String> times,
+            @RequestParam(name = "major", required = false) List<String> majors,
             @RequestParam(name = "isExceeded", required = false) Boolean isExceeded,
             @RequestParam(name = "lectureName", required = false) String lectureName,
             @RequestParam(name = "cursor", required = false) Long cursor,
             @RequestParam(name = "limit", defaultValue = "50") int limit
     ) {
         CursorResult<LectureResponseDto> lectures = lectureRetrieveService.retrieveLectures(
-                campus, type, grade, day, time, major, isExceeded, lectureName, cursor, limit
+                campuses, types, grades, days, times, majors, isExceeded, lectureName, cursor, limit
         );
         return ApiResponse.success(lectures);
     }

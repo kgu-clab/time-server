@@ -4,6 +4,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 import page.time.api.domain.lecture.domain.Lecture;
 import page.time.api.domain.lecture.domain.Type;
 
@@ -52,7 +53,7 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom {
     }
 
     private BooleanExpression eqToCampuses(List<String> campuses) {
-        if (campuses == null || campuses.isEmpty()) {
+        if (CollectionUtils.isEmpty(campuses)) {
             return null;
         }
         return campuses.stream()
@@ -62,7 +63,7 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom {
     }
 
     private BooleanExpression eqToTypes(List<Type> types) {
-        if (types == null || types.isEmpty()) {
+        if (CollectionUtils.isEmpty(types)) {
             return null;
         }
         return types.stream()
@@ -72,7 +73,7 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom {
     }
 
     private BooleanExpression eqToGrades(List<Integer> grades) {
-        if (grades == null || grades.isEmpty()) {
+        if (CollectionUtils.isEmpty(grades)) {
             return null;
         }
         return grades.stream()
@@ -82,7 +83,7 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom {
     }
 
     private BooleanExpression eqToDays(List<String> days) {
-        if (days == null || days.isEmpty()) {
+        if (CollectionUtils.isEmpty(days)) {
             return null;
         }
         return days.stream()
@@ -92,7 +93,7 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom {
     }
 
     private BooleanExpression eqToTimes(List<String> times) {
-        if (times == null || times.isEmpty()) {
+        if (CollectionUtils.isEmpty(times)) {
             return null;
         }
         return times.stream()
@@ -109,7 +110,7 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom {
     }
 
     private BooleanExpression eqToMajors(List<String> majors) {
-        if (majors == null || majors.isEmpty()) {
+        if (CollectionUtils.isEmpty(majors)) {
             return null;
         }
         return majors.stream()

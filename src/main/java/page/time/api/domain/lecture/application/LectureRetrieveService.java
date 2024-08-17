@@ -7,9 +7,11 @@ import page.time.api.domain.lecture.dao.LectureRepository;
 import page.time.api.domain.lecture.domain.Lecture;
 import page.time.api.domain.lecture.domain.Type;
 import page.time.api.domain.lecture.dto.response.LectureResponseDto;
+import page.time.api.domain.lecture.dto.response.LectureSelectResponseDto;
 import page.time.api.global.common.CursorResult;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,5 +34,14 @@ public class LectureRetrieveService {
     @Transactional(readOnly = true)
     public List<String> retrieveMajor(String major) {
         return lectureRepository.findByMajor(major);
+    }
+
+    @Transactional(readOnly = true)
+    public List<LectureSelectResponseDto> retrieveSelectedLecturesByIds(List<Long> lectureIds) {
+        return lectureIds.stream()
+                .map(lectureRepository::findById)
+                .flatMap(Optional::stream)
+                .map(LectureSelectResponseDto::toDto)
+                .toList();
     }
 }

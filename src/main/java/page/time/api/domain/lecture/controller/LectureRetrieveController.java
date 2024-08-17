@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import page.time.api.domain.lecture.application.LectureRetrieveService;
 import page.time.api.domain.lecture.domain.Type;
 import page.time.api.domain.lecture.dto.response.LectureResponseDto;
+import page.time.api.domain.lecture.dto.response.LectureSelectResponseDto;
 import page.time.api.global.common.ApiResponse;
 import page.time.api.global.common.CursorResult;
 
@@ -54,5 +55,14 @@ public class LectureRetrieveController {
     ) {
         List<String> majors = lectureRetrieveService.retrieveMajor(major);
         return ApiResponse.success(majors);
+    }
+
+    @Operation(summary = "선택한 강의 id 리스트에 맞는 강의 정보 조회")
+    @GetMapping("/select")
+    public ApiResponse<List<LectureSelectResponseDto>> retrieveLecturesById(
+            @RequestParam List<Long> lectureIds
+    ) {
+        List<LectureSelectResponseDto> lectures = lectureRetrieveService.retrieveSelectedLecturesByIds(lectureIds);
+        return ApiResponse.success(lectures);
     }
 }

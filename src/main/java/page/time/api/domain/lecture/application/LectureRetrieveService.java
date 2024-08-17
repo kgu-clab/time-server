@@ -11,7 +11,7 @@ import page.time.api.domain.lecture.dto.response.LectureSelectResponseDto;
 import page.time.api.global.common.CursorResult;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,8 +39,8 @@ public class LectureRetrieveService {
     @Transactional(readOnly = true)
     public List<LectureSelectResponseDto> retrieveSelectedLecturesByIds(List<Long> lectureIds) {
         return lectureIds.stream()
-                .map(id -> lectureRepository.findById(id).orElse(null))
-                .filter(Objects::nonNull)
+                .map(lectureRepository::findById)
+                .flatMap(Optional::stream)
                 .map(LectureSelectResponseDto::toDto)
                 .toList();
     }

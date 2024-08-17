@@ -1,19 +1,13 @@
 package page.time.api.domain.lecture.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import page.time.api.domain.lecture.domain.Lecture;
 import page.time.api.domain.lecture.domain.Type;
 import page.time.api.global.common.IdProvider;
 
 @Getter
-@Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class LectureResponseDto implements IdProvider {
 
     private Long id;

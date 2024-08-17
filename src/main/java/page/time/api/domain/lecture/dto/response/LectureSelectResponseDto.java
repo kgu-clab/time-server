@@ -1,18 +1,12 @@
 package page.time.api.domain.lecture.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import page.time.api.domain.lecture.domain.Lecture;
 import page.time.api.domain.lecture.domain.Type;
 
 @Getter
-@Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class LectureSelectResponseDto {
 
     private Long id;

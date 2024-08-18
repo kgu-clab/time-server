@@ -409,37 +409,32 @@ def deployNewInstance() {
 }
 
 def performHealthCheck() {
-    withEnv([
-        "WHITELIST_ADMIN_USERNAME=${env.WHITELIST_ADMIN_USERNAME}",
-        "WHITELIST_ADMIN_PASSWORD=${env.WHITELIST_ADMIN_PASSWORD}"
-    ]) {
-        def PUBLIC_IP = sh(script: "curl -s ifconfig.me", returnStdout: true).trim()
-        echo "Public IP address: ${PUBLIC_IP}"
+    def PUBLIC_IP = sh(script: "curl -s ifconfig.me", returnStdout: true).trim()
+    echo "Public IP address: ${PUBLIC_IP}"
 
-        def start_time = System.currentTimeMillis()
-        def timeout = start_time + 150000  // 2.5 minutes
+    def start_time = System.currentTimeMillis()
+    def timeout = start_time + 150000  // 2.5 minutes
 
-        while (System.currentTimeMillis() < timeout) {
-            def elapsed = (System.currentTimeMillis() - start_time) / 1000
-            echo "Checking health... ${elapsed} seconds elapsed."
-            def status = sh(
-                script: """curl -s http://${PUBLIC_IP}:${env.NEW_PORT}/actuator/health | grep 'UP'""",
-                returnStatus: true
+    while (System.currentTimeMillis() < timeout) {
+        def elapsed = (System.currentTimeMillis() - start_time) / 1000
+        echo "Checking health... ${elapsed} seconds elapsed."
+        def status = sh(
+            script: """curl -s http://${PUBLIC_IP}:${env.NEW_PORT}/actuator/health | grep 'UP'""",
+            returnStatus: true
             )
-            if (status == 0) {
-                echo "New application started successfully after ${elapsed} seconds."
-                return
-            }
-            sleep 5
+        if (status == 0) {
+            echo "New application started successfully after ${elapsed} seconds."
+            return
         }
-
-        if (System.currentTimeMillis() >= timeout) {
-            sendSlackNotification(":scream_cat: New Staging application(Time) did not start successfully within 2.5 minutes.", env.SLACK_COLOR_FAILURE)
-            sh "docker stop ${env.DEPLOY_CONTAINER}"
-            sh "docker rm ${env.DEPLOY_CONTAINER}"
-            error "Health check failed"
-        }
+        sleep 5
     }
+
+    if (System.currentTimeMillis() >= timeout) {
+        sendSlackNotification(":scream_cat: New Staging application(Time) did not start successfully within 2.5 minutes.", env.SLACK_COLOR_FAILURE)
+        sh "docker stop ${env.DEPLOY_CONTAINER}"
+        sh "docker rm ${env.DEPLOY_CONTAINER}"
+        error "Health check failed"
+    } 
 }
 
 def switchTrafficAndCleanup() {
@@ -455,9 +450,9 @@ def switchTrafficAndCleanup() {
             echo "Switching traffic to ${DEPLOY_CONTAINER} on port ${NEW_PORT}."
             docker exec ${NGINX_CONTAINER_NAME} bash -c '
                 export BACKEND_URL=${NEW_TARGET}
-                envsubst "\\\$BACKEND_URL" < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
+                envsubst "\\\$BACKEND_URL" < /etc/nginx/conf.d/time.conf.template > /etc/nginx/conf.d/time.conf
             '
-            docker exec ${NGINX_CONTAINER_NAME} sed -i 's/${OLD_PORT}/${NEW_PORT}/' /etc/nginx/conf.d/default.conf
+            docker exec ${NGINX_CONTAINER_NAME} sed -i 's/${OLD_PORT}/${NEW_PORT}/' /etc/nginx/conf.d/time.conf
             docker exec ${NGINX_CONTAINER_NAME} nginx -t
             docker exec ${NGINX_CONTAINER_NAME} nginx -s reload
 

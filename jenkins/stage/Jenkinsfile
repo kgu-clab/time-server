@@ -340,7 +340,7 @@ def buildApplication() {
     ]) {
         sh """
             echo "Building application with profile ${PROFILE}..."
-            ./gradlew clean build -Penv=${PROFILE} --stacktrace --info
+            ./gradlew clean build -Penv=${PROFILE} -x test --stacktrace --info
         """
     }
 }

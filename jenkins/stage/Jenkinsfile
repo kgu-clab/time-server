@@ -39,7 +39,7 @@ pipeline {
 
                         env.MYSQL_USER = config.mysql.user
                         env.MYSQL_PASSWORD = config.mysql.password
-                        env.MYSQL_DAtABASE = config.mysql.database
+                        env.MYSQL_DATABASE = config.mysql.database
                         env.BACKUP_DIR = config.mysql.'backup-dir'
 
                         env.DOCKER_HUB_REPO = config.dockerhub.repo

@@ -423,8 +423,7 @@ def performHealthCheck() {
             def elapsed = (System.currentTimeMillis() - start_time) / 1000
             echo "Checking health... ${elapsed} seconds elapsed."
             def status = sh(
-                script: """curl -s -u ${WHITELIST_ADMIN_USERNAME}:${WHITELIST_ADMIN_PASSWORD} \
-                    http://${PUBLIC_IP}:${env.NEW_PORT}/actuator/health | grep 'UP'""",
+                script: """curl -s http://${PUBLIC_IP}:${env.NEW_PORT}/actuator/health | grep 'UP'""",
                 returnStatus: true
             )
             if (status == 0) {

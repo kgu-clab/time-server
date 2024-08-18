@@ -2,7 +2,7 @@
 FROM openjdk:21-jdk
 
 # Expose port 8080 to the outside world
-EXPOSE 8000
+EXPOSE 8080
 
 # Copy the JAR file into the container
 COPY build/libs/time.jar /time.jar

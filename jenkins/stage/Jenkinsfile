@@ -87,7 +87,7 @@ pipeline {
         stage('Slack Notification: Time Staging Server Testing') {
             steps {
                 script {
-                    sendSlackNotification(":test_tube: Testing Time Staging server...", env.SLACK_COLOR_SUCCESS)
+                    sendSlackNotification(":test_tube: Testing Staging server(Time)...", env.SLACK_COLOR_SUCCESS)
                 }
             }
         }
@@ -293,7 +293,7 @@ def backupMysql() {
             docker exec ${MYSQL_CONTAINER_NAME} sh -c 'mysqldump -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} > ${BACKUP_DIR}/${BACKUP_FILE}'
         """
     }
-    sendSlackNotification(":floppy_disk: MySQL backup completed successfully: ${BACKUP_FILE}", env.SLACK_COLOR_SUCCESS)
+    sendSlackNotification(":floppy_disk: Time MySQL backup completed successfully: ${BACKUP_FILE}", env.SLACK_COLOR_SUCCESS)
 }
 
 def dockerLogin() {
@@ -405,7 +405,7 @@ def deployNewInstance() {
             docker ps -a
         """
     }
-    sendSlackNotification(":low_battery: Restarting the Staging server...", env.SLACK_COLOR_SUCCESS)
+    sendSlackNotification(":low_battery: Restarting Staging server(Time)...", env.SLACK_COLOR_SUCCESS)
 }
 
 def performHealthCheck() {
@@ -435,7 +435,7 @@ def performHealthCheck() {
         }
 
         if (System.currentTimeMillis() >= timeout) {
-            sendSlackNotification(":scream_cat: New Staging application did not start successfully within 2.5 minutes.", env.SLACK_COLOR_FAILURE)
+            sendSlackNotification(":scream_cat: New Staging application(Time) did not start successfully within 2.5 minutes.", env.SLACK_COLOR_FAILURE)
             sh "docker stop ${env.DEPLOY_CONTAINER}"
             sh "docker rm ${env.DEPLOY_CONTAINER}"
             error "Health check failed"

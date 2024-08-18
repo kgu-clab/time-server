@@ -84,10 +84,10 @@ pipeline {
             }
         }
 
-        stage('Slack Notification: Staging Server Testing') {
+        stage('Slack Notification: Time Staging Server Testing') {
             steps {
                 script {
-                    sendSlackNotification(":test_tube: Testing the Staging server...", env.SLACK_COLOR_SUCCESS)
+                    sendSlackNotification(":test_tube: Testing Time Staging server...", env.SLACK_COLOR_SUCCESS)
                 }
             }
         }

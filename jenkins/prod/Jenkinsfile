@@ -1,6 +1,6 @@
 /*
  * To use the following functionality:
- * withCredentials([file(credentialsId: 'plus_stage_config_yml', variable: 'CONFIG_FILE')]) {
+ * withCredentials([file(credentialsId: 'plus_prod_config_yml', variable: 'CONFIG_FILE')]) {
  *
  * The 'Pipeline Utility Steps' plugin must be installed on your Jenkins instance.
  *
@@ -32,7 +32,7 @@ pipeline {
                 script {
                     FAILED_STAGE = env.STAGE_NAME
                 }
-                withCredentials([file(credentialsId: 'plus_stage_config_yml', variable: 'CONFIG_FILE')]) {
+                withCredentials([file(credentialsId: 'plus_prod_config_yml', variable: 'CONFIG_FILE')]) {
                     script {
                         def config = readYaml(file: env.CONFIG_FILE)
 
@@ -420,7 +420,7 @@ def performHealthCheck() {
         sh "docker stop ${env.DEPLOY_CONTAINER}"
         sh "docker rm ${env.DEPLOY_CONTAINER}"
         error "Health check failed"
-    } 
+    }
 }
 
 def switchTrafficAndCleanup() {

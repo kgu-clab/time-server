@@ -372,7 +372,7 @@ def deployNewInstance() {
 
             echo "Running new container ${DEPLOY_CONTAINER} with image ${IMAGE_NAME}:${DEPLOY_CONTAINER}"
             docker run -d --name ${DEPLOY_CONTAINER} \\
-                -p ${NEW_PORT}:8000 \\
+                -p ${NEW_PORT}:8080 \\
                 --network ${APPLICATION_NETWORK} \\
                 -v ${EXTERNAL_SERVER_CONFIG_PATH}:${INTERNAL_SERVER_CONFIG_PATH} \\
                 -v ${EXTERNAL_SERVER_CLOUD_PATH}:${INTERNAL_SERVER_CLOUD_PATH} \\

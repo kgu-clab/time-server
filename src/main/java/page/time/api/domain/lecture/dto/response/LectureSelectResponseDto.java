@@ -17,6 +17,7 @@ public class LectureSelectResponseDto {
     private String professor;
     private String room;
     private String time;
+    private Integer credit;
 
     public static LectureSelectResponseDto toDto(Lecture lecture) {
         return LectureSelectResponseDto.builder()
@@ -28,6 +29,7 @@ public class LectureSelectResponseDto {
                 .professor(lecture.getProfessor())
                 .room(lecture.getRoom())
                 .time(lecture.getTime())
+                .credit(lecture.getCredit())
                 .build();
     }
 }
